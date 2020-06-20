@@ -358,7 +358,16 @@
     var printFlights = (flights) => {
       var str = "";
       flights.forEach((flight) => {
-        str = str.concat("<br>" + flight.flightNo);
+        str = str.concat(
+          "<br>" +
+            flight.airline +
+            ", " +
+            flight.flightNo +
+            ", from " +
+            flight.depart +
+            " to " +
+            flight.arrival
+        );
       });
       return str;
     };
