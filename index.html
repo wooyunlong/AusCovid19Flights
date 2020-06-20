@@ -142,11 +142,6 @@
         </div>
       </td>
     </tr>
-    <tr>
-      <td valign="top">
-        <div id="map"></div>
-      </td>
-    </tr>
   </table>
 
   <script>
@@ -500,8 +495,8 @@
               tooltipMap
                 .html('<span style="color:white">' + path.depart + "</span>")
                 .attr("class", "tooltipOrigin")
-                .style("left", c[0] + 61 * 8 + "px")
-                .style("top", c[1] + 180 + "px")
+                .style("left", c[0] + 55 * 8 + "px")
+                .style("top", c[1] + 210 + "px")
                 .transition()
                 .duration(700)
                 .style("opacity", 1);
@@ -548,8 +543,8 @@
                 .html('<span style="color:white">' + path.arrival + "</span>")
                 .attr("class", "tooltipDestination")
                 .attr("transform", "translate(0,20)")
-                .style("left", c[0] + 61 * 8 + "px")
-                .style("top", c[1] + 215 + "px")
+                .style("left", c[0] + 55 * 8 + "px")
+                .style("top", c[1] + 210 + "px")
                 .transition()
                 .duration(700)
                 .style("opacity", 1);
