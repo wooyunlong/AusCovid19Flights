@@ -133,10 +133,11 @@
           </h2>
           <div id="whatContent">
             <p>
-              International and domestic flight is one of the many transmission
-              pathways of this disease in Australia. <br />We collected 51 days
-              of data (February 23 to April 13) from every Australian State
-              Government, and visualized it with D3.
+              February 23 to April 13 <br />
+              644 Flights <br />
+              8 State Government<br />Visualized with D3 <br />
+              *The website is still under development. Dataset, Reference and,
+              Data Source to be updated.
             </p>
           </div>
         </div>
@@ -147,7 +148,7 @@
   <script>
     d3.select("#what")
       .on("mouseover", function (event) {
-        d3.select("#whatContent").style("border", "15px solid #f2cf59");
+        d3.select("#whatContent").style("border", "5px solid #f2cf59");
       })
       .on("mouseout", function (event) {
         d3.select("#whatContent").style("border", "0px");
@@ -155,7 +156,7 @@
 
     d3.select("#when")
       .on("mouseover", function (event) {
-        d3.select("#heatMap").style("border", "15px solid #f2cf59");
+        d3.select("#heatMap").style("border", "5px solid #f2cf59");
       })
       .on("mouseout", function (event) {
         d3.select("#heatMap").style("border", "0px");
@@ -163,7 +164,7 @@
 
     d3.select("#where")
       .on("mouseover", function (event) {
-        d3.select("#mapPart").style("border", "15px solid #f2cf59");
+        d3.select("#mapPart").style("border", "5px solid #f2cf59");
       })
       .on("mouseout", function (event) {
         d3.select("#mapPart").style("border", "0px");
@@ -309,7 +310,7 @@
 
       var mouseclick = function (d) {
         if (d3.select(this).style("stroke") === "none") {
-          d3.select(this).style("stroke", "black").style("opacity", 1);
+          d3.select(this).style("stroke", "#f2cf59").style("opacity", 1);
           removeConnections();
           d.flights.forEach(function (flight) {
             paths.push(flight);
