@@ -110,6 +110,17 @@
       padding: 0;
       margin: 0;
     }
+
+    #reference p {
+      margin-top: 25px;
+      font-size: 13px;
+      text-align: right;
+    }
+    #reference a:link,
+    a:visited {
+      color: yellow;
+      font-size: 13px;
+    }
   </style>
 </head>
 
@@ -119,7 +130,7 @@
 
   <table id="invisableTable">
     <tr>
-      <td rowspan="2"><div id="heatMap"></div></td>
+      <td rowspan="3"><div id="heatMap"></div></td>
       <td valign="top" width="500">
         <div id="map">
           <ul id="titleLine">
@@ -758,7 +769,7 @@
     function drawMap(paths) {
       var countries, height, path, projection, scale, svg, width;
       var width = 900;
-      var height = 500;
+      var height = 460;
       var center = [10, 80];
       var scale = 140;
       projection = d3
@@ -791,5 +802,14 @@
       this.projection = projection;
     }
     this.drawMap(this.paths);
+    d3.select("#map").append("div").attr("id", "reference").html(`<p>
+            The Map function was based on
+            <a href="https://blog.robertjesionek.com/d3js-geo/"
+              >Robert Jesionek's </a
+            >marvelous work.
+         </br>
+            The dataset was obtained from
+            <a href="https://covid-19-au.com">COVID-19-AU </a>Project.
+          </p>`);
   </script>
 </body>
