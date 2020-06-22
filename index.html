@@ -83,8 +83,8 @@
       font-family: arial;
     }
 
-    ul#display-inline-block-example,
-    ul#display-inline-block-example li {
+    ul#titleLine,
+    ul#titleLine li {
       /* Setting a common base */
       font-family: Arial;
       font-size: 70px;
@@ -120,24 +120,28 @@
   <table id="invisableTable">
     <tr>
       <td rowspan="2"><div id="heatMap"></div></td>
-      <td valign="top">
+      <td valign="top" width="500">
         <div id="map">
-          <ul id="display-inline-block-example">
+          <ul id="titleLine">
             <li id="what">What</li>
             <li id="where">Where</li>
             <li id="when">When</li>
           </ul>
           <h2>
-            International Flights Arrived Australia with COVID-19 Cases in 51
+            International Flights Arrived in Australia with COVID-19 Cases in 51
             Days
           </h2>
           <div id="whatContent">
             <p>
-              February 23 to April 13 <br />
-              644 Flights <br />
-              8 State Government<br />Visualized with D3 <br />
-              *The website is still under development. Dataset, Reference and,
-              Data Source to be updated.
+              International flight is one of the transmission pathways of
+              COVID-19 in Australia. This app aims at visualizing flight data
+              that links to COVID19 disclosed by Australian State Governments
+              from February 23 to April 13, to help you understand the What,
+              When and Why factors of this matter.
+            </p>
+            <p style="color: #fa6e4f; font-weight: bold;">
+              Please move your mouse over the "What", "When", "Where" titles
+              above to see how to interact with this app.
             </p>
           </div>
         </div>
@@ -146,53 +150,81 @@
   </table>
 
   <script>
-    d3.select("#what")
-      .on("mouseover", function (event) {
-        d3.select("#whatContent").style("border", "5px solid #f2cf59");
-      })
-      .on("mouseout", function (event) {
-        d3.select("#whatContent").style("border", "0px");
-      });
-
-    d3.select("#when")
-      .on("mouseover", function (event) {
-        d3.select("#heatMap").style("border", "5px solid #f2cf59");
-      })
-      .on("mouseout", function (event) {
-        d3.select("#heatMap").style("border", "0px");
-      });
-
-    d3.select("#where")
-      .on("mouseover", function (event) {
-        d3.select("#mapPart").style("border", "5px solid #f2cf59");
-      })
-      .on("mouseout", function (event) {
-        d3.select("#mapPart").style("border", "0px");
-      });
-  </script>
-
-  <script>
-    /*
-     * Set Canvas
-     */
-    // set the dimensions and margins of the graph
-    var margin = { top: 30, right: 25, bottom: 20, left: 80 },
-      width = 53 * 8 - margin.left - margin.right,
-      height = 40 * 51 - margin.top - margin.bottom;
-
-    // append the svg object to the body of the page
-    var heatMap = d3
-      .select("#heatMap")
-      .append("svg")
-      .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom)
-      .append("g")
-      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-    /*
-     *  Prepare Data and Prepare scales and axis
-     */
     d3.json("./wrangled.json", function (data) {
+      /*
+       * Title Area
+       */
+      d3.select("#what")
+        .on("mouseover", function (event) {
+          d3.select("#whatContent").style("border", "5px solid #f2cf59");
+          barOn();
+          d3.select("#whatContent")
+            .append("div")
+            .attr("class", "tooltipHeatMap")
+            .attr("id", "whatTooltip")
+            .style("opacity", 1)
+            .html(
+              `
+              From Feburary 23 to April 13, 341 international flights arrived Australia. </br>
+              ${dataByState[0].State}: ${dataByState[0].Value}</br>
+              ${dataByState[1].State}: ${dataByState[1].Value}</br>
+              ${dataByState[2].State}: ${dataByState[2].Value}</br>
+              ${dataByState[3].State}: ${dataByState[3].Value}</br>
+              ${dataByState[4].State}: ${dataByState[4].Value}</br>
+              ${dataByState[5].State}: ${dataByState[5].Value}</br>
+              ${dataByState[6].State}: ${dataByState[6].Value}</br>
+              ${dataByState[7].State}: ${dataByState[7].Value}`
+            )
+            .style("top", "100px")
+            .style("left", "500px");
+        })
+        .on("mouseout", function (event) {
+          d3.select("#whatContent").style("border", "0px");
+          barOff();
+          d3.select("#whatTooltip").remove();
+        });
+      d3.select("#when")
+        .on("mouseover", function (event) {
+          d3.select("#heatMap").style("border", "5px solid #f2cf59");
+          d3.select("#heatMap")
+            .append("div")
+            .attr("class", "tooltipHeatMap")
+            .attr("id", "whenTooltip")
+            .style("opacity", 1)
+            .html(
+              `
+              From February 23 to April 13, 341 international flights arrived in Australia. </br> When did these flights arrive in Australia exactly? Select a box to see.`
+            )
+            .style("top", "10px")
+            .style("left", "10px");
+        })
+        .on("mouseout", function (event) {
+          d3.select("#heatMap").style("border", "0px");
+          d3.select("#whenTooltip").remove();
+        });
+      d3.select("#where")
+        .on("mouseover", function (event) {
+          d3.select("#mapPart").style("border", "5px solid #f2cf59");
+          d3.select("#map")
+            .append("div")
+            .attr("class", "tooltipHeatMap")
+            .attr("id", "whereTooltip")
+            .style("opacity", 1)
+            .html(
+              `
+              From February 23 to April 13, 341 international flights arrived in Australia. </br> Where did these flights come from exactly? Select a date on the left-hand side panel to see the flight routes.`
+            )
+            .style("top", "300px")
+            .style("left", "400px");
+        })
+        .on("mouseout", function (event) {
+          d3.select("#mapPart").style("border", "0px");
+          d3.select("#whereTooltip").remove();
+        });
+
+      /*
+       * Data Preparation
+       */
       //create an obj of all the dates of the dataset, including blank dates
       function createCalendar(data) {
         //fill the array with objects with dates
@@ -232,7 +264,7 @@
         return arr;
       }
 
-      //add data to the blank obj, i.e. the final dataset
+      //add data to the heatmap calendar
       var calendar = createCalendar(data);
       data.forEach((flight) => {
         if (flight.intDom == "international")
@@ -246,6 +278,58 @@
             .flights.push(flight);
       });
       console.log(calendar);
+
+      //prepare bar chart data
+      var dataByState = [
+        { State: "NSW", Value: 0 },
+        { State: "VIC", Value: 0 },
+        { State: "QLD", Value: 0 },
+        { State: "ACT", Value: 0 },
+        { State: "WA", Value: 0 },
+        { State: "SA", Value: 0 },
+        { State: "NT", Value: 0 },
+        { State: "TAS", Value: 0 },
+      ];
+
+      calendar.forEach((box) => {
+        if (box.state == "NSW") {
+          dataByState[0].Value += box.flights.length;
+        } else if (box.state == "VIC") {
+          dataByState[1].Value += box.flights.length;
+        } else if (box.state == "QLD") {
+          dataByState[2].Value += box.flights.length;
+        } else if (box.state == "ACT") {
+          dataByState[3].Value += box.flights.length;
+        } else if (box.state == "WA") {
+          dataByState[4].Value += box.flights.length;
+        } else if (box.state == "SA") {
+          dataByState[5].Value += box.flights.length;
+        } else if (box.state == "NT") {
+          dataByState[6].Value += box.flights.length;
+        } else if (box.state == "TAS") {
+          dataByState[7].Value += box.flights.length;
+        }
+      });
+      dataByState.sort(function (b, a) {
+        return a.Value - b.Value;
+      });
+
+      /*
+       * Heat Map
+       */
+      // set the dimensions and margins of the graph
+      var margin = { top: 30, right: 25, bottom: 20, left: 80 },
+        width = 53 * 8 - margin.left - margin.right,
+        height = 40 * 51 - margin.top - margin.bottom;
+
+      // append the svg object to the body of the page
+      var heatMap = d3
+        .select("#heatMap")
+        .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
       // Labels of row and columns
       var dates = d3
@@ -288,7 +372,7 @@
         .append("div")
         .attr("class", "tooltipHeatMap");
 
-      // Three function that change the tooltip when user hover / move / leave a cell
+      // Event Callbacks that change the tooltip when user hover / move / leave a cell
       var mouseover = function (d) {
         tooltipHeatMap.style("opacity", 1);
         d3.select(this).style("opacity", 1);
@@ -307,7 +391,6 @@
         tooltipHeatMap.style("opacity", 0);
         d3.select(this).style("opacity", 0.8);
       };
-
       var mouseclick = function (d) {
         if (d3.select(this).style("stroke") === "none") {
           d3.select(this).style("stroke", "#f2cf59").style("opacity", 1);
@@ -354,27 +437,97 @@
         .on("mousemove", mousemove)
         .on("mouseleave", mouseleave)
         .on("click", mouseclick);
+
+      var printFlights = (flights) => {
+        var str = "";
+        flights.forEach((flight) => {
+          str = str.concat(
+            "<br>" +
+              flight.airline +
+              ", " +
+              flight.flightNo +
+              ", from " +
+              flight.depart +
+              " to " +
+              flight.arrival
+          );
+        });
+        return str;
+      };
+
+      /*
+       * Bar Chart
+       */
+      var barOn = function () {
+        var marginBar = { top: 0, right: 10, bottom: 28, left: 28 },
+          whatContentW = 500 - marginBar.left - marginBar.right,
+          whatContentH = 100 - marginBar.top - marginBar.bottom;
+
+        var barChart = d3
+          .select("#whatContent")
+          .html("")
+          .append("svg")
+          .attr("width", whatContentW + marginBar.left + marginBar.right)
+          .attr("height", whatContentH + marginBar.top + marginBar.bottom)
+          .append("g")
+          .attr(
+            "transform",
+            "translate(" + marginBar.left + "," + marginBar.top + ")"
+          );
+
+        // X axis
+        var barX = d3
+          .scaleBand()
+          .range([0, whatContentW])
+          .domain(
+            dataByState.map(function (d) {
+              return d.State;
+            })
+          )
+          .padding(0.2);
+        barChart
+          .append("g")
+          .attr("transform", "translate(0," + whatContentH + ")")
+          .call(d3.axisBottom(barX))
+          .selectAll("text")
+          .attr("transform", "translate(-10,0)rotate(-45)")
+          .style("text-anchor", "end");
+
+        // Y axis
+        var barY = d3.scaleLinear().domain([0, 230]).range([whatContentH, 0]);
+        barChart.append("g").call(d3.axisLeft(barY).ticks(4, "f"));
+
+        // Bars
+        barChart
+          .selectAll("mybar")
+          .data(dataByState)
+          .enter()
+          .append("rect")
+          .attr("x", function (d) {
+            return barX(d.State);
+          })
+          .attr("y", function (d) {
+            return barY(d.Value);
+          })
+          .attr("width", barX.bandwidth())
+          .attr("height", function (d) {
+            console.log(d);
+            return whatContentH - barY(d.Value);
+          })
+          .attr("fill", "#FBCA9D");
+      };
     });
 
-    var printFlights = (flights) => {
-      var str = "";
-      flights.forEach((flight) => {
-        str = str.concat(
-          "<br>" +
-            flight.airline +
-            ", " +
-            flight.flightNo +
-            ", from " +
-            flight.depart +
-            " to " +
-            flight.arrival
-        );
-      });
-      return str;
+    var barOff = function () {
+      var barChart = d3.select("#whatContent").html(
+        `<p> International flight is one of the transmission pathways of COVID-19 in Australia. This app aims at visualizing flight data that links to COVID19 disclosed by Australian State Governments from February 23 to April 13, to help you understand the What, When and Why factors of this matter.</p> 
+        <p style="color: #fa6e4f; font-weight: bold;">Please move your mouse over the "What", "When", "Where" titles above to see how to interact with this app.</p>`
+      );
     };
-  </script>
 
-  <script>
+    /**
+     * Map
+     */
     var paths = [];
     var speed = 2800; //km/sec
     var tooltipMap = d3
@@ -605,7 +758,7 @@
     function drawMap(paths) {
       var countries, height, path, projection, scale, svg, width;
       var width = 900;
-      var height = 550;
+      var height = 500;
       var center = [10, 80];
       var scale = 140;
       projection = d3
@@ -623,7 +776,6 @@
         .attr("width", width)
         .attr("transform", "translate(0,20)")
         .style("background", "#8EC9BB"); //background color of the map
-      // .style("background", "#C1E1EC"); //background color of the map
       countries = svg.append("g");
       d3.json("worldTopo.json", function (data) {
         countries
@@ -637,7 +789,6 @@
       });
       this.svg = svg;
       this.projection = projection;
-      // this.drawConnections();
     }
     this.drawMap(this.paths);
   </script>
